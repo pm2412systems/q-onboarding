@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q Onboarding Portal</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;-webkit-text-size-adjust:100%}
+.container{max-width:480px;margin:0 auto;min-height:100vh;background:#fff}
+.header{background:#c00000;padding:16px 20px;text-align:center}
+.header h1{color:#fff;font-size:13px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase}
+.content{padding:20px}
+.state-badge{background:#c00000;color:#fff;text-align:center;padding:14px 16px;border-radius:8px;margin-bottom:16px}
+.state-badge h2{font-size:18px;font-weight:600;letter-spacing:0.5px}
+.steps{background:#FFF8E1;border-left:3px solid #EF9F27;padding:12px 14px;border-radius:0 8px 8px 0;margin-bottom:16px}
+.steps p.steps-title{font-size:13px;font-weight:600;color:#633806;margin-bottom:6px}
+.steps p{font-size:12px;color:#854F0B;margin-bottom:3px;line-height:1.5}
+.steps p:last-child{margin-bottom:0}
+.sign-btn{display:block;background:#c00000;color:#fff;text-align:center;padding:16px;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;letter-spacing:0.5px;margin-bottom:12px;transition:background 0.2s}
+.sign-btn:hover{background:#a00000}
+.sign-btn:active{transform:scale(0.98)}
+.email-note{font-size:11px;color:#888;text-align:center;margin-bottom:20px;line-height:1.5}
+.divider{border:none;border-top:2px solid #c00000;margin:0 0 16px}
+.preview-label{font-size:12px;color:#666;text-align:center;margin-bottom:8px}
+.pdf-container{width:100%;border-radius:8px;overflow:hidden;border:1px solid #e0e0e0;margin-bottom:16px}
+.pdf-container iframe{width:100%;height:500px;border:none}
+.footer{text-align:center;padding:16px 20px;background:#f9f9f9;border-top:1px solid #eee}
+.footer p{font-size:10px;color:#aaa}
+.error-container{text-align:center;padding:60px 20px}
+.error-container h2{font-size:20px;color:#c00000;margin-bottom:12px}
+.error-container p{font-size:14px;color:#666;line-height:1.6}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Q Onboarding Portal</h1>
+  </div>
+
+  <div id="main-content" class="content">
+    <div class="state-badge">
+      <h2 id="state-title"></h2>
+    </div>
+
+    <div class="steps">
+      <p class="steps-title">Complete these 2 steps:</p>
+      <p>1. Review your employee handbook below</p>
+      <p>2. Tap the red button to sign your handbook, W-4, and I-9</p>
+    </div>
+
+    <a id="sign-btn" class="sign-btn" href="#" target="_blank">TAP HERE TO SIGN</a>
+
+    <p class="email-note">Copies of all documents will be emailed to you upon signing.</p>
+
+    <hr class="divider">
+
+    <p class="preview-label">Employee Handbook Preview</p>
+
+    <div class="pdf-container">
+      <iframe id="pdf-viewer" src="" allow="autoplay"></iframe>
+    </div>
+  </div>
+
+  <div id="error-content" class="content hidden">
+    <div class="error-container">
+      <h2>Page Not Found</h2>
+      <p>This onboarding link appears to be invalid. Please contact your manager for the correct link.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Fashion Q Employee Onboarding</p>
+  </div>
+</div>
+
+<script>
+var states = {
+  virginia: {
+    name: "Virginia",
+    pdf: "1ogXr2CTYp5v2g82vqz1BDuIi3EEGZwJH",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=021c51a4-8034-4111-945d-4ea373fe1208s_jRPRb"
+  },
+  texas: {
+    name: "Texas",
+    pdf: "1sNdwLBn8Zo1adM3H75YdB7hRjMhxXyvm",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=06f35cd5-1235-4d6c-912e-11a769c284c0s_TobaY"
+  },
+  tennessee: {
+    name: "Tennessee",
+    pdf: "1BApckJTIYc-l64pJtdqDtmfxYLYH4EDC",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=c6a1318c-6c46-41eb-aa66-f29dc93c4fdes_dwhbe"
+  },
+  northcarolina: {
+    name: "North Carolina",
+    pdf: "1LfTjMSv-p3e10PzBnLHjSMeA-bl0oyi6",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=9f6590cb-b282-4aeb-9a35-f9c79a80ebfas_pZP0v"
+  },
+  nevada: {
+    name: "Nevada",
+    pdf: "11mYl6qanJJUoo_PDyu-uGMQ8kt4SC9Ru",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=0f88ca1b-8286-4739-97d5-f388573db429s_k5odb"
+  },
+  maryland: {
+    name: "Maryland",
+    pdf: "1TVA2vWdgNoaPk1NlWMZRzSDHcIOlMsE1",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=fa12f6b5-0987-41ad-8b8c-b57c89fea6e7s_5VZ8a"
+  },
+  georgia: {
+    name: "Georgia",
+    pdf: "1a9PJNYe96PDl3tzQPAhoxR89qymfnkBO",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=5c27d677-33c6-4d33-8cae-03cac0c43621s_7bjEG"
+  },
+  illinois: {
+    name: "Illinois",
+    pdf: "1aCX_oIsb-bXYOgEtcNLRftMfv8gLo0fi",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=e8791dee-6bbe-48e4-b57d-c316e844f9e7s_ENFfX"
+  },
+  florida: {
+    name: "Florida",
+    pdf: "1LhPg-6GK4ibiwDSo860KPqnD1waeH0nM",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=0bbe24df-a567-4cbe-9937-f21887f10aees_a7u1z"
+  },
+  colorado: {
+    name: "Colorado",
+    pdf: "13Jkt7tlr9nN6Euot97nyQvO8dKYRU1Mp",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=6d253e28-3f85-4525-9fcc-f9141367ba88s_hMgxM"
+  },
+  california: {
+    name: "California",
+    pdf: "1mSSHFcadwY16BOefsB2GUnW0790laNDP",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=b71422ed-2b49-43c4-9be7-76a7fcdf64b7s_zYk2k"
+  },
+  arizona: {
+    name: "Arizona",
+    pdf: "12mma0c74WW6auT0d5qAz2SxrHWqZYpM3",
+    boldsign: "https://app.boldsign.com/document/sign-bulk-links/?documentId=074ec6b5-a357-4275-b120-7678038afe30s_M6eOf"
+  }
+};
+
+function init() {
+  var params = new URLSearchParams(window.location.search);
+  var stateKey = (params.get("state") || "").toLowerCase().replace(/\s+/g, "");
+
+  if (!stateKey || !states[stateKey]) {
+    document.getElementById("main-content").className = "content hidden";
+    document.getElementById("error-content").className = "content";
+    return;
+  }
+
+  var state = states[stateKey];
+
+  document.title = state.name + " Employee Handbook - Q Onboarding";
+  document.getElementById("state-title").textContent = state.name.toUpperCase() + " EMPLOYEE HANDBOOK";
+  document.getElementById("sign-btn").href = state.boldsign;
+  document.getElementById("pdf-viewer").src = "https://drive.google.com/file/d/" + state.pdf + "/preview";
+}
+
+init();
+</script>
+
+</body>
+</html>
